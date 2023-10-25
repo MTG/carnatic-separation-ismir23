@@ -25,7 +25,7 @@ Additional arguments can be passed to use a different model (`--model-name`), mo
 
 To train your own model, you should first prepare the data. See [how we do process Saraga](./dataset/prepare_saraga.py) before the training process detailed in the paper. The key idea is to have the chunked and aligned audio samples of the dataset with a naming like: `<unique_id>_<source>.wav`, where `<source>` corresponds to `mixture` and `vocals`.
 
-Then, run model training in [train.py](./train.py). Checkpoints will be stored every X training steps, X is defined by user in the (./config.py) file.
+Then, run model training in [train.py](./train.py). Checkpoints will be stored every X training steps, X is defined by user in the [config.py](./config.py) file.
 
 To start to train from previous checkpoint, `--load-step` is available.
 
