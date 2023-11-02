@@ -8,8 +8,6 @@ import numpy as np
 import soundfile as sf
 import tensorflow as tf
 
-from scipy.signal import get_window
-
 from config import Config as UnetConfig
 from model import DiffWave
 from model.vad import VAD
@@ -17,7 +15,8 @@ from model.clustering import get_mask
 from utils.signal_processing import (
     compute_stft,
     compute_signal_from_stft,
-    next_power_of_2
+    next_power_of_2,
+    get_overlap_window,
 )
 
 
@@ -62,7 +61,7 @@ def main(args):
         # Normalize features, all energy curves having same range
         normalized_feat = []
         for j in np.arange(diff_feat_t.shape[1]):
-            normalized_curve = diff_feat_t[:, j] / np.max(np.abs(diff_feat_t[:, j]))
+            normalized_curve = diff_feat_t[:, j] / (np.max(np.abs(diff_feat_t[:, j]))+1e-6)
             normalized_feat.append(normalized_curve)
         normalized_feat = np.array(normalized_feat, dtype=np.float32)
 
@@ -87,11 +86,11 @@ def main(args):
         boundary = "end" if trim == runs-2 else None
 
         placehold_voc = np.zeros(output_voc.shape)
-        placehold_voc[trim_low:trim_low+pred_audio.shape[0]] = pred_audio * get_window(pred_audio, boundary=boundary)
+        placehold_voc[trim_low:trim_low+pred_audio.shape[0]] = pred_audio * get_overlap_window(pred_audio, boundary=boundary)
         output_voc += placehold_voc
         trim_low += pred_audio.shape[0] // 2
 
-    output_voc = output_voc * (np.max(np.abs(mixture.numpy())) / np.max(np.abs(output_voc)))
+    output_voc = output_voc * (np.max(np.abs(mixture.numpy())) / (np.max(np.abs(output_voc))+1e-6))
     
     # Building intuitive filename with model config
     filefolder = os.path.join(args.input_signal.split("/")[:-1])
@@ -107,7 +106,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--model-name', default='saraga-8')
     parser.add_argument('--input_signal', default=None, type=str)
-    parser.add_argument('--batch-size', default=6)
+    parser.add_argument('--batch-size', default=3)
     parser.add_argument('--clusters', default=4, type=int)
     parser.add_argument('--scheduler', default=3., type=float)
     parser.add_argument('--gpu', default=None)

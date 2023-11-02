@@ -17,4 +17,4 @@ def get_mask(normalized_feat, clusters, scheduler):
     weights = []
     for j in kmeans.labels_:
         weights.append(label_and_dist[j])
-    return tf.math.divide(weights, float(clusters-1))
+    return np.array(weights, dtype=np.float32) / float(clusters-1)
