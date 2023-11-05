@@ -3,9 +3,9 @@ This is the official repository for:
 
 - Carnatic Singing Voice Separation Using Cold Diffusion on Training Data with Bleeding, G. Plaja-Roglans, M. Miron, A. Shankar and X. Serra, 2023 (accepted for presentation at ISMIR 2023, Milan, Italy).
 
-**Important note:** The code structure and an important part of the data loader and training code is an adaptation of the unofficial Tensorflow implementation of DiffWave (Zhifeng Kong et al., 2020). [Link to original repo](https://github.com/revsic/tf-diffwave).
+**IMPORTANT NOTE:** The code structure and an important part of the data loader and training code is an adaptation of the unofficial Tensorflow implementation of DiffWave (Zhifeng Kong et al., 2020). [Link to original repo](https://github.com/revsic/tf-diffwave).
 
-**Another important note:** The model in this repo can also be used for easy inference through the Python library [compIAM](https://github.com/MTG/compIAM), a centralized repository of tools, models, and datasets for the computational analysis of Carnatic and Hindustani Music. With a few commands, you can easily download and run the separation model. Refer to `compIAM` to use these model (and many others!) out-of-the-box.
+**ANOTHER IMPORTANT NOTE:** The model in this repo can also be used for hassle-free inference through the Python library [compIAM](https://github.com/MTG/compIAM), a centralized repository of tools, models, and datasets for the computational analysis of Carnatic and Hindustani Music. With a few commands, you can easily download and run the separation model. Refer to `compIAM` to use these model (and many others!) out-of-the-box. `compIAM` is installed with `pip install compiam``, make sure to install `v0.3.0` to use the separation model in this repo.
 
 ## Requirements
 
@@ -30,12 +30,12 @@ Then, run model training in [train.py](./train.py). Checkpoints will be stored e
 To start to train from previous checkpoint, `--load-step` is available.
 
 ```bash
-python .\train.py --load-step 416 --config ./ckpt/<model_name>.json
+python3 train.py --load-step 416 --config ./ckpt/<model_name>.json
 ```
 
 Download the pre-trained weights for the feature extraction U-Net [here](https://drive.google.com/uc?export=download&id=1yj9iHTY7nCh2qrIM2RIUOXhLXt1K8WcE).
 
-Unzip and store the weights into the [ckpt folder](./ckpt/). There should be .json file with the configuration, and a folder with the TF weights inside. Here's an example:
+Unzip and store the weights into the [ckpt folder](./ckpt/). There should be .json file with the configuration, and a folder with the model weight checkpoint inside. Here's an example:
 
 ```py
 with open('./ckpt/saraga-8.json') as f:
